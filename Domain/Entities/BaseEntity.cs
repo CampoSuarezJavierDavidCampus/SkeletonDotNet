@@ -1,4 +1,4 @@
 namespace Domain.Entities;
 public class BaseEntity{
-    int IdPk { get; set; }
+    public int IdPk { get; set; }
 }
