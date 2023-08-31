@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApiContext>( options =>{
-   string connection = builder.Configuration.GetConnectionString("connection")!;
+   string connection = builder.Configuration.GetConnectionString("connectionLinux")!;
    options.UseMySql(connection, ServerVersion.AutoDetect(connection));
 });
 

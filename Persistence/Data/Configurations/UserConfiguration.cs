@@ -2,6 +2,7 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace Persistence.Data.Configurations;
 public class UserConfiguration : IEntityTypeConfiguration<User>
@@ -9,7 +10,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         
-        builder.ToTable("user");
+        builder.ToTable("user");        
         builder.HasKey(X => X.IdPk);
         builder.Property(x => x.IdPk)
             .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)            
