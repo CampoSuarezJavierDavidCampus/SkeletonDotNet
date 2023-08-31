@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Persistence;
 public class ApiContext : DbContext
 {
-    protected ApiContext(DbContextOptions<ApiContext> options): base(options){}
+    public ApiContext(DbContextOptions<ApiContext> options): base(options){}
     public DbSet<Rol> Rols { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<RolUser> RolUsers { get; set; }
