@@ -17,6 +17,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("idPk")
             .HasColumnType("INT");
 
+
         builder.Property(x => x.Usename)
             .IsRequired()
             .HasColumnName("username")
@@ -32,16 +33,24 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnName("email")
             .HasMaxLength(100);    
 
+        builder.HasIndex(p => new{
+            p.Usename,p.Email
+        })
+        .HasDatabaseName("IX_Username_Email")
+        .IsUnique();
+        
         builder.HasMany(x => x.Rols)
             .WithMany(x => x.Users)
             .UsingEntity<RolUser>(
                 t => t.HasOne(j => j.Rol)
                     .WithMany(t => t.RolUsers)
-                    .HasForeignKey(j => j.Rol),
+                    .HasForeignKey(j => j.RolIdPk),
                 t => t.HasOne(j => j.User)
                     .WithMany(t => t.RolUsers)
-                    .HasForeignKey(j => j.User),                
+                    .HasForeignKey(j => j.UserIdPk),                
                 t => {
+                    
+                    t.ToTable("rolUser");
                     t.Property(j => j.RolIdPk)
                         .HasColumnName("rolIdPk")
                         .IsRequired()
