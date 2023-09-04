@@ -16,7 +16,7 @@ public abstract class GenericRepository<T> : IGenericRepository<T>, IDisposable 
     public virtual (decimal totalPages, IEnumerable<T> Records) Find(Expression<Func<T, bool>>? expression = null){
         var records = GetRecords(expression);
         return (
-            records.TotalPages<T>(),
+            records.TotalPages(),
             records
         );        
     }
