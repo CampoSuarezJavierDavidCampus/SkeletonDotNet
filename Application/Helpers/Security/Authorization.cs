@@ -1,9 +1,6 @@
+using Domain.Interface.Security;
+
 namespace Application.Helpers.Security;
 public class Authorization{
-    public enum Roles{
-        Admin,
-        Manager,
-        Employee
-    }
-    public const Roles default_role = Roles.Employee;
+    public const Rols Default_role = Rols.Employee;       
 }

@@ -1,5 +1,7 @@
+using Domain.Interface.Security;
+
 namespace Application.Helpers.Security;
-public class JWT{
+public class JWT: IJWT{
     public string Key { get; set; } = null!;   
     public string Issuer { get; set; } = null!;    
     public string Audience { get; set; } = null!;    

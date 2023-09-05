@@ -1,5 +1,5 @@
 namespace Api.Dtos;
-public class UserDto{
+public class UserDataDto{
     public string Username { get; set; } = null!;
     public bool IsAuthenticated { get; set; }
     public  string Message { get; set; } = null!;
