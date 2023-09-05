@@ -12,7 +12,7 @@ public class UserRepository : GenericRepositoryWithIntId<User>, IUserRepository
 
     public async Task<User?> FindUserByUsername(string username)=>await FindFirst(p => p.Usename == username);
 
-    protected override async Task<IEnumerable<User>> GetRecords(Expression<Func<User, bool>>? conditions = null, bool GetFist = false){
+    /* protected override async Task<IEnumerable<User>> GetRecords(Expression<Func<User, bool>>? conditions = null, bool GetFist = false){
         int take = 0;
         if(GetFist)
             take = 1;
@@ -29,5 +29,5 @@ public class UserRepository : GenericRepositoryWithIntId<User>, IUserRepository
             ).ToListAsync();
         }
         return await _Entity.Take(take).ToListAsync();
-    }
+    } */
 }

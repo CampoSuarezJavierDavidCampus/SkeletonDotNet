@@ -15,7 +15,7 @@ public class JwtGenerator : IJwtGenerator{
                 user.Usename
             )
         };        
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN_GENERATOR_KEY")!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("6bz%;MVYYM`6tk2/X3jjC}%CRT#QUUt^Qv$OI<=M?3)wWX+T%-9B'xrt(url%s]Yg@Y9LTsCr}g|e@:>{iSCte}Uwye`"));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
         var tokenDescription = new SecurityTokenDescriptor{
             Subject = new ClaimsIdentity(claims),

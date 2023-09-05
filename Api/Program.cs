@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigurationRatelimiting();
 builder.Services.ConfigureApiVersioning();
 
-var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN_GENERATOR_KEY")!));
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("6bz%;MVYYM`6tk2/X3jjC}%CRT#QUUt^Qv$OI<=M?3)wWX+T%-9B'xrt(url%s]Yg@Y9LTsCr}g|e@:>{iSCte}Uwye`"));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>{
     opt.TokenValidationParameters = new TokenValidationParameters{
         ValidateIssuerSigningKey = true,
@@ -29,7 +29,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.ConfigureCors();
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(); 
 builder.Services.AddDbContext<ApiContext>( options =>{
    string connection = builder.Configuration.GetConnectionString("connectionLinux")!;
    options.UseMySql(connection, ServerVersion.AutoDetect(connection));

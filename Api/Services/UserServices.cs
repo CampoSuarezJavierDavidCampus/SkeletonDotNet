@@ -11,13 +11,13 @@ namespace Api.Services;
 public class UserServices : IUserServices
 {
     private readonly IUnitOfWork _UnitOfWork;
-    private readonly PasswordHasher<User> _PasswordHasher;
+    private readonly IPasswordHasher<User> _PasswordHasher;
     private readonly IJwtGenerator _JwtGenerator;
     private readonly JWT _Jwt;    
 
     public UserServices(
         IUnitOfWork UnitOfWork,
-        PasswordHasher<User> PasswordHasher,
+        IPasswordHasher<User> PasswordHasher,
         IJwtGenerator JwtGenerator,
         IOptions<JWT> Jwt
     )
@@ -78,12 +78,12 @@ public class UserServices : IUserServices
         var user = CreateUser(model);
 
         var existingUser = _UnitOfWork.Users.FindUserByUsername(model.Username);
-        if (existingUser != null){
-            return $"El usuario con {model.Username} ya se encuentra registrado.";
+        if (existingUser == null){
+            return $"El usuario {model.Username} ya se encuentra registrado.";
         }
-
+        
         var defaultRol =  (await _UnitOfWork.Rols.FindByRol( Authorization.Default_role ))!;
-
+        
         try{
             user.Rols.Add(defaultRol);
             _UnitOfWork.Users.Add(user);
