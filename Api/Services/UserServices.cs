@@ -95,6 +95,47 @@ public class UserServices : IUserServices
         
     }
 
+    public async Task<LogginDto?> UserLoggin(LogginDto model){
+        User? user = await _UnitOfWork.Users.FindUserByUsername(model.Username);        
+        if(user != null && ValidatePassword(user, model.Password)){
+            return model;
+        }
+        return null;
+    }
+
+    /*! pendiente realizar esta validacion*/
+    /*public async Task<DatosUsuarioDto> GetTokenAsync(LoginDto model)
+    {
+        DatosUsuarioDto datosUsuarioDto = new DatosUsuarioDto();
+        var usuario = await _unitOfWork.Usuarios
+                    .GetByUsernameAsync(model.Username);
+
+        if (usuario == null)
+        {
+            datosUsuarioDto.EstaAutenticado = false;
+            datosUsuarioDto.Mensaje = $"No existe ningún usuario con el username {model.Username}.";
+            return datosUsuarioDto;
+        }
+
+        var resultado = _passwordHasher.VerifyHashedPassword(usuario, usuario.Password, model.Password);
+
+        if (resultado == PasswordVerificationResult.Success)
+        {
+            datosUsuarioDto.EstaAutenticado = true;
+            JwtSecurityToken jwtSecurityToken = CreateJwtToken(usuario);
+            datosUsuarioDto.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            datosUsuarioDto.Email = usuario.Email;
+            datosUsuarioDto.UserName = usuario.Username;
+            datosUsuarioDto.Roles = usuario.Roles
+                                            .Select(u => u.Nombre)
+                                            .ToList();
+            return datosUsuarioDto;
+        }
+        datosUsuarioDto.EstaAutenticado = false;
+        datosUsuarioDto.Mensaje = $"Credenciales incorrectas para el usuario {usuario.Username}.";
+        return datosUsuarioDto;
+    }*/
+
     private User CreateUser(SingUpDto model){
         User user = new(){
             Email = model.Email,
