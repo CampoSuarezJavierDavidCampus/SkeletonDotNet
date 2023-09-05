@@ -1,5 +1,6 @@
 using AutoMapper;
 using Domain.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -9,6 +10,7 @@ public abstract class GenericController{
     protected readonly IMapper _Mapper = null!;
 
     [HttpGet]
+    [Authorize]
     [MapToApiVersion("1.0")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

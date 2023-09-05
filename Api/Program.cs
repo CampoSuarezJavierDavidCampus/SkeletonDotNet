@@ -1,6 +1,9 @@
 using System.Reflection;
+using System.Text;
 using Api.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +18,19 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureApiVersioning();
 builder.Services.ConfigurationRatelimiting();
 builder.Services.AddApplicationServices();
+
+
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN_GENERATOR_KEY")!));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>{
+    opt.TokenValidationParameters = new TokenValidationParameters{
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = key,
+        ValidateAudience = false,
+        ValidateIssuer = false
+    };
+});
+
+
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.AddDbContext<ApiContext>( options =>{
    string connection = builder.Configuration.GetConnectionString("connectionLinux")!;
@@ -35,6 +51,7 @@ app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseRateLimiter();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
