@@ -1,19 +1,37 @@
-using Api.Dtos;
-using Application.Services;
+using AutoMapper;
+using Domain.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
-public class UserController: BaseApiController{
-    private readonly IUserServices _UserServices;
-    public UserController(IUserServices userServices) => _UserServices = userServices;
+public class UserController : GenericControllerWithIntId
+{
+    public UserController(IUnitOfWork unitOfWork, IMapper mapper){
+        _UnitOfWork = unitOfWork;
+        _Mapper = mapper;
+    }
 
-    [HttpPost("register")]
-    public async Task<ActionResult> RegisterAsync(SingUpDto model) => Ok(await _UserServices.RegisterAsync(model));
+    public override Task<IActionResult> Delete(string id)
+    {
+        throw new NotImplementedException();
+    }
 
-    [HttpPost("Token")]    
-    public async Task<ActionResult> GetTokenAsync(LogginDto model) => Ok(await _UserServices.GetTokenAsync(model));
+    public override Task<ActionResult<EntityDto>> Get<EntityDto>(int id)
+    {
+        throw new NotImplementedException();
+    }
 
-    [HttpPost("addrol")]
-    public async Task<ActionResult> AddRolAsync(AddRolDto model) => Ok(await _UserServices.AddRolAsync(model));
+    public override async Task<ActionResult<IEnumerable<UserXRolDto>>> Get<UserXRolDto>(){
+        var users = await _UnitOfWork.Users.Find();
+        return _Mapper.Map<List<UserXRolDto>>(users);
+    }
 
+    public override Task<ActionResult<EntityDto>> Post<EntityDto>(EntityDto Entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Task<ActionResult<EntityDto>> Put<EntityDto>(int id, [FromBody] EntityDto entityDto)
+    {
+        throw new NotImplementedException();
+    }
 }

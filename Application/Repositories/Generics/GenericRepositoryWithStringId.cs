@@ -11,5 +11,5 @@ public class GenericRepositoryWithStringId<T>: GenericRepository<T>, IGenericRep
 {    
     public GenericRepositoryWithStringId(ApiContext context) : base(context){}    
 
-    public virtual T FindByStringId(string id)=>FindFirst(p => p.IdPk == id);
+    public virtual async Task<T> FindByStringId(string id)=>await FindFirst(p => p.IdPk == id);
 }

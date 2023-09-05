@@ -9,8 +9,8 @@ using Domain.Interface.Pagination;
 namespace Application.Repositories;
 public abstract class GenericRepository<T>: IGenericRepository<T>  where T : class
 {
-    private readonly ApiContext _Context;
-    private readonly DbSet<T> _Entity ;
+    protected readonly ApiContext _Context;
+    protected readonly DbSet<T> _Entity ;
     public GenericRepository(ApiContext context){
         _Context = context;
         _Entity = _Context.Set<T>();

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers;
 [ApiVersion("1.0")]
 public abstract class GenericController{
-    protected readonly IUnitOfWork _UnitOfWork=null!;
-    protected readonly IMapper _Mapper = null!;
+    protected  IUnitOfWork _UnitOfWork=null!;
+    protected  IMapper _Mapper = null!;
 
     [HttpGet]
     [Authorize]

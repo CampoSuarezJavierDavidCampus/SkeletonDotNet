@@ -14,11 +14,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.ConfigureCors();
-builder.Services.ConfigureApiVersioning();
 builder.Services.ConfigurationRatelimiting();
-builder.Services.AddApplicationServices();
-
+builder.Services.ConfigureApiVersioning();
 
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN_GENERATOR_KEY")!));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>{
@@ -30,8 +27,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
+builder.Services.ConfigureCors();
+builder.Services.AddApplicationServices();
 builder.Services.AddDbContext<ApiContext>( options =>{
    string connection = builder.Configuration.GetConnectionString("connectionLinux")!;
    options.UseMySql(connection, ServerVersion.AutoDetect(connection));
