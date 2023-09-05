@@ -3,9 +3,11 @@ using Domain.Interface;
 using Application.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Api.Helpers.Paginator;
+using Domain.Interface.Pagination;
 
 namespace Application.Repositories;
-public abstract class GenericRepository<T> : IGenericRepository<T>, IDisposable where T : class
+public abstract class GenericRepository<T> : IDisposable where T : class
 {
     private readonly ApiContext _Context;
     private readonly DbSet<T> _Entity ;
@@ -13,17 +15,16 @@ public abstract class GenericRepository<T> : IGenericRepository<T>, IDisposable 
         _Context = context;
         _Entity = _Context.Set<T>();
     }
-    public virtual (decimal totalPages, IEnumerable<T> Records) Find(Expression<Func<T, bool>>? expression = null){
+    public virtual IEnumerable<T> Find(Expression<Func<T, bool>>? expression = null){
         var records = GetRecords(expression);
-        return (
-            records.TotalPages(),
-            records
-        );        
+        return records;      
     }
-
-    public virtual (int CurrentIndex, IEnumerable<T> Records) Find(int pageIndex, Expression<Func<T, bool>>? expression = null){
-        var records = GetRecords(expression);
-        return records.GetPage(pageIndex);      
+    public virtual async Task<IPager<T>> Find(IPageParam param, Expression<Func<T, bool>>? expression = null){
+        if (GetRecords(expression) is not IQueryable<T> records)
+        {
+            return new Pager<T>(Enumerable.Empty<T>(), param);
+        }
+        return await records.GetPaged<T>(param) ;
     }
     
     public T FindFirst(Expression<Func<T, bool>> expression) => GetRecords(expression,true).First();

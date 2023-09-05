@@ -1,10 +1,11 @@
 using System.Linq.Expressions;
+using Domain.Interface.Pagination;
 
 namespace Domain.Interface;
 public interface IGenericRepository<T> where T : class{
 
-    (decimal totalPages, IEnumerable<T> Records) Find(Expression<Func<T, bool>>? expression = null);
-    (int CurrentIndex, IEnumerable<T> Records) Find(int pageIndex, Expression<Func<T, bool>>? expression = null);
+    IEnumerable<T> Find(Expression<Func<T, bool>>? expression = null);    
+    public Task<IPager<T>> Find(IPageParam param, Expression<Func<T, bool>>? expression = null);  
     T FindFirst(Expression<Func<T,bool>> expression) ;     
     Task<int> SaveChanges();
 

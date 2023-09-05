@@ -1,5 +1,7 @@
+using Domain.Interface.Pagination;
+
 namespace Api.Helpers.Paginator;
-public class PageParam{
+public class PageParam: IPageParam{
     private static readonly int _MaxRecords = 50;
     private int _PageIndex = 1;
     private int _RecordsPerPage = 5;
