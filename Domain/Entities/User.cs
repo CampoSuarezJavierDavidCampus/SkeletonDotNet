@@ -1,5 +1,7 @@
+using Domain.Entities.Generics;
+
 namespace Domain.Entities;
-public class User:BaseEntity{
+public class User:BaseEntityWithIntId{
     public string Usename { get; set; } = null!;
     public string Password { get; set; } = null!;
     public string Email { get; set; } = null!;

@@ -1,6 +1,5 @@
 using Domain.Entities;
+using Domain.Interface.Generics;
 
 namespace Domain.Interface;
-public interface IUserRepository: IGenericRepository<User>{
-        
-}
+public interface IUserRepository: IGenericRepositoryWithIntId<User>{}
