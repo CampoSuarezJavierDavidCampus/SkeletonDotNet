@@ -7,5 +7,5 @@ using Persistence;
 namespace Application.Repositories;
 public class RolRepository : GenericRepositoryWithIntId<Rol>, IRolRepository{
     public RolRepository(ApiContext context) : base(context){}
-    public Rol? FindByRol(Rols rol)=>FindFirst(p => p.Description == rol.ToString());
+    public async Task<Rol?> FindByRol(Rols rol)=>await FindFirst(p => p.Description == rol.ToString());
 }

@@ -9,5 +9,5 @@ public class UserRepository : GenericRepositoryWithIntId<User>, IUserRepository
 {
     public UserRepository(ApiContext context) : base(context){}
 
-    public User? FindUserByUsername(string username)=>FindFirst(p => p.Usename == username);
+    public async Task<User?> FindUserByUsername(string username)=>await FindFirst(p => p.Usename == username);
 }

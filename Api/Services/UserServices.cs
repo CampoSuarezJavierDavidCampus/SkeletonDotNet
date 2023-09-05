@@ -30,13 +30,13 @@ public class UserServices : IUserServices
 
 
     public async Task<string> AddRolAsync(AddRolDto model){
-        User? user = _UnitOfWork.Users.FindUserByUsername(model.Username);
+        User? user = await _UnitOfWork.Users.FindUserByUsername(model.Username);
         if (user == null){
             return $"No existe algún usuario registrado con la cuenta {model.Username}.";
         }else if(ValidatePassword(user,model.Password)){
             return $"Credenciales incorrectas para el usuario {model.Username}.";
         }
-        var existingRol = _UnitOfWork.Rols.FindFirst(x => x.Description == model.Rol);
+        var existingRol = await _UnitOfWork.Rols.FindFirst(x => x.Description == model.Rol);
         if (existingRol == null){
              return $"Rol {model.Rol} agregado a la cuenta {model.Username} de forma exitosa.";
         }
@@ -57,7 +57,7 @@ public class UserServices : IUserServices
         UserDataDto userData = new(){
             IsAuthenticated = false,            
         };
-        var user = _UnitOfWork.Users.FindUserByUsername(model.Username);
+        var user = await _UnitOfWork.Users.FindUserByUsername(model.Username);
         if (user == null){
             userData.Message = $"No existe ningún usuario con el username {model.Username}.";
         }else if(!ValidatePassword(user, model.Password)){
@@ -82,7 +82,7 @@ public class UserServices : IUserServices
             return $"El usuario con {model.Username} ya se encuentra registrado.";
         }
 
-        var defaultRol =  _UnitOfWork.Rols.FindByRol( Authorization.Default_role )!;
+        var defaultRol =  (await _UnitOfWork.Rols.FindByRol( Authorization.Default_role ))!;
 
         try{
             user.Rols.Add(defaultRol);
