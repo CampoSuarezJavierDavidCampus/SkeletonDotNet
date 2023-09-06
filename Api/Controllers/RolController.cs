@@ -1,17 +1,20 @@
 using Api.Controllers;
 using Api.Dtos;
+using Api.Helpers.Paginator;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interface;
+using Domain.Interface.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiIncidencias.Controllers;
 [ApiVersion("1.0")]
-public class RolAsyncController : BaseApiController{
+[ApiVersion("1.1")]
+public class RolController : BaseApiController{
     private readonly IUnitOfWork _UnitOfWork;
     private readonly IMapper _Mapper;
 
-    public RolAsyncController (IUnitOfWork unitOfWork,IMapper mapper){
+    public RolController (IUnitOfWork unitOfWork,IMapper mapper){
         _UnitOfWork = unitOfWork;
         _Mapper = mapper;
     }
@@ -26,17 +29,27 @@ public class RolAsyncController : BaseApiController{
        return _Mapper.Map<List<RolDto>>(records);
     }
 
+    [HttpGet]
+    [MapToApiVersion("1.1")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<Pager<RolXUserDtos>>> Get11([FromQuery] PageParam param){
+        IPager<Rol> pager = await _UnitOfWork.Rols.Find(param);
+        pager.Records = (IEnumerable<Rol>)_Mapper.Map<List<RolXUserDtos>>(pager.Records);        
+        return CreatedAtAction("users",pager);
+    }
+
     [HttpGet("{id}")]
     //[Authorize]
     [MapToApiVersion("1.0")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<RolDto>> Get(int id){
+    public async Task<ActionResult<RolXUserDtos>> Get(int id){
        var record = await _UnitOfWork.Rols.FindByIntId(id);
        if (record == null){
            return NotFound();
        }
-       return _Mapper.Map<RolDto>(record);
+       return _Mapper.Map<RolXUserDtos>(record);
     }
 
     [HttpPost]
@@ -57,7 +70,7 @@ public class RolAsyncController : BaseApiController{
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<RolDto>> Put([FromBody]RolDto? recordDto){
+    public async Task<ActionResult<RolDtoWithId>> Put([FromBody]RolDtoWithId? recordDto){
        if(recordDto == null)
            return NotFound();
        var record = _Mapper.Map<Rol>(recordDto);

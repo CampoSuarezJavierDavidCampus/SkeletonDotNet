@@ -34,7 +34,7 @@ public class UserController : BaseApiController{
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UserXRolDto>> Get(int id)
     {
-        var user = await _UnitOfWork.Users.Find(x => x.IdPk == id);
+        var user = await _UnitOfWork.Users.FindByIntId(id);
         if (user == null){
             return NotFound();
         }

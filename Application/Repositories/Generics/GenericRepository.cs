@@ -27,7 +27,12 @@ public abstract class GenericRepository<T>: IGenericRepository<T>  where T : cla
         return await records.GetPaged(param) ;
     }
     
-    public async Task<T?> FindFirst(Expression<Func<T, bool>> expression) =>  (await GetRecords(expression))?.First();
+    public virtual async Task<T?> FindFirst(Expression<Func<T, bool>> expression) {
+        if (expression is not null){
+            return await _Entity.Where(expression).FirstAsync();
+        }
+        return await _Entity.FirstAsync();
+    }
 
     public virtual void Add(T entity)=>_Entity.Add(entity);
     public virtual void AddRange(ICollection<T> entities)=>_Entity.AddRange(entities);

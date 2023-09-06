@@ -33,7 +33,7 @@ public class UserServices : IUserServices
         User? user = await _UnitOfWork.Users.FindUserByUsername(model.Username);
         if (user == null){
             return $"No existe algún usuario registrado con la cuenta {model.Username}.";
-        }else if(ValidatePassword(user,model.Password)){
+        }else if(!ValidatePassword(user,model.Password)){
             return $"Credenciales incorrectas para el usuario {model.Username}.";
         }
         var existingRol = await _UnitOfWork.Rols.FindFirst(x => x.Description == model.Rol);
@@ -41,10 +41,10 @@ public class UserServices : IUserServices
              return $"Rol {model.Rol} agregado a la cuenta {model.Username} de forma exitosa.";
         }
         
-        var userHasRol = user.Rols.Any(x => x.IdPk == existingRol.IdPk);
-        if (!userHasRol)
+        var userHasRol = user.Rols?.Any(x => x.IdPk == existingRol.IdPk);
+        if (userHasRol == false)
         {
-            user.Rols.Add(existingRol);
+            user.Rols?.Add(existingRol);
             _UnitOfWork.Users.Update(user);
             await _UnitOfWork.SaveChanges();
         }
@@ -85,7 +85,7 @@ public class UserServices : IUserServices
         var defaultRol =  (await _UnitOfWork.Rols.FindByRol( Authorization.Default_role ))!;
         
         try{
-            user.Rols.Add(defaultRol);
+            user.Rols?.Add(defaultRol);
             _UnitOfWork.Users.Add(user);
             await _UnitOfWork.SaveChanges();
             return $"El usuario  {model.Username} ha sido registrado exitosamente";

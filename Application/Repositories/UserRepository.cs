@@ -12,22 +12,37 @@ public class UserRepository : GenericRepositoryWithIntId<User>, IUserRepository
 
     public async Task<User?> FindUserByUsername(string username)=>await FindFirst(p => p.Usename == username);
 
-    /* protected override async Task<IEnumerable<User>> GetRecords(Expression<Func<User, bool>>? conditions = null, bool GetFist = false){
-        int take = 0;
-        if(GetFist)
-            take = 1;
-
-        if (conditions is not null){
-            return await _Entity.Where(conditions).Take(take).Include(
-                x =>x.RolUsers.ToList().Select(
-                    j =>_Context.Rols.Where(
-                        x => x.IdPk == j.RolIdPk
-                    ).Select(
-                        x => x.Description
-                    )
-                )
-            ).ToListAsync();
+     public override async Task<User?> FindFirst(Expression<Func<User, bool>> expression) {
+        if (expression is not null){
+            return await _Entity.Where(expression)
+            .Include(x => x.Rols)
+            .Select(x => new User(){
+                IdPk = x.IdPk,
+                Usename = x.Usename,
+                Email = x.Email,
+                Rols = x.Rols.Select(j => new Rol(){
+                    Description = j.Description                    
+                }).ToList()
+            })
+            .FirstAsync();
         }
-        return await _Entity.Take(take).ToListAsync();
-    } */
+        return await _Entity.FirstAsync();
+    }
+
+    protected override async Task<IEnumerable<User>> GetRecords(Expression<Func<User, bool>>? conditions = null){
+        if (conditions is not null){
+            return await _Entity.Where(conditions)
+                .Include(x => x.Rols)
+                .Select(x => new User(){
+                    IdPk = x.IdPk,
+                    Usename = x.Usename,
+                    Email = x.Email,
+                    Rols = x.Rols.Select(j => new Rol(){
+                        Description = j.Description                    
+                    }).ToList()
+                })
+                .ToListAsync();
+        }
+        return await _Entity.ToListAsync();
+    }
 }

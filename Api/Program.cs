@@ -31,7 +31,7 @@ builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.ConfigureCors();
 builder.Services.AddApplicationServices(); 
 builder.Services.AddDbContext<ApiContext>( options =>{
-   string connection = builder.Configuration.GetConnectionString("connectionLinux")!;
+   string connection = builder.Configuration.GetConnectionString("connectionWindows")!;
    options.UseMySql(connection, ServerVersion.AutoDetect(connection));
 });
 
