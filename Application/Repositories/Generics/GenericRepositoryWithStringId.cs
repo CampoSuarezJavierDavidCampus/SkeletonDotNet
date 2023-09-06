@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain.Entities.Generics;
 using Domain.Interface.Generics;
 using Persistence;
@@ -11,5 +7,5 @@ public class GenericRepositoryWithStringId<T>: GenericRepository<T>, IGenericRep
 {    
     public GenericRepositoryWithStringId(ApiContext context) : base(context){}    
 
-    public virtual async Task<T> FindByStringId(string id)=>await FindFirst(p => p.IdPk == id);
+    public virtual async Task<T?> FindByStringId(string id)=>await FindFirst(p => p.IdPk == id);
 }

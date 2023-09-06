@@ -27,7 +27,7 @@ public abstract class GenericRepository<T>: IGenericRepository<T>  where T : cla
         return await records.GetPaged(param) ;
     }
     
-    public async Task<T?> FindFirst(Expression<Func<T, bool>> expression) =>  (await GetRecords(expression,true))?.First();
+    public async Task<T?> FindFirst(Expression<Func<T, bool>> expression) =>  (await GetRecords(expression))?.First();
 
     public virtual void Add(T entity)=>_Entity.Add(entity);
     public virtual void AddRange(ICollection<T> entities)=>_Entity.AddRange(entities);
@@ -35,15 +35,11 @@ public abstract class GenericRepository<T>: IGenericRepository<T>  where T : cla
     public virtual void Remove(T entity) => _Entity.Remove(entity);
     public virtual void RemoveRange(ICollection<T> entities) => _Entity.RemoveRange(entities);
 
-    protected virtual async Task<IEnumerable<T>> GetRecords(Expression<Func<T, bool>>? conditions = null, bool GetFist = false){
-        int take = 0;
-        if(GetFist)
-            take = 1;
-
+    protected virtual async Task<IEnumerable<T>> GetRecords(Expression<Func<T, bool>>? conditions = null){
         if (conditions is not null){
-            return await _Entity.Where(conditions).Take(take).ToListAsync();
+            return await _Entity.Where(conditions).ToListAsync();
         }
-        return await _Entity.Take(take).ToListAsync();
+        return await _Entity.ToListAsync();
     }
 
 }

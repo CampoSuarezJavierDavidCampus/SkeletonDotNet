@@ -1,6 +1,5 @@
 using Api.Dtos;
 using Application.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;

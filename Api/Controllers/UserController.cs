@@ -2,7 +2,6 @@ using Api.Dtos;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interface;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
